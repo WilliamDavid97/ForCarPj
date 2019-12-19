@@ -1,10 +1,10 @@
-import 'package:chocholay_car/view/home_page/home_view.dart';
-import 'package:chocholay_car/view/home_page/profile.dart';
+import 'package:chocholay_car/view/home_page/home/add_item.dart';
+import 'package:chocholay_car/view/home_page/home/home_view.dart';
+import 'package:chocholay_car/view/home_page/message/message.dart';
+import 'package:chocholay_car/view/home_page/profile/profile.dart';
 import 'package:chocholay_car/view/widget/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
-
-import 'message.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -52,6 +52,21 @@ class _HomePageState extends State<HomePage> {
               currentPage = position;
             });
           },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (BuildContext context) => AddItem()));
+          print("item add");
+        },
+        backgroundColor: Colors.grey[100].withOpacity(0.5),
+        child: Container(
+          child: Icon(
+            Icons.add,
+            color: Colors.indigo[400],
+            size: 50,
+          ),
         ),
       ),
     );

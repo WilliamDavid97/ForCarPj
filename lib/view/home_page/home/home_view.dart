@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chocholay_car/constant/constants.dart';
 import 'package:chocholay_car/ob/movie_response.dart';
+import 'package:chocholay_car/view/home_page/home/detail_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -111,7 +113,8 @@ class _HomeViewState extends State<HomeView> {
             style: TextStyle(
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
-                color: Colors.indigo),
+                color: Colors.indigo,
+                fontFamily: 'TheLedDisplaySt'),
           ),
         ),
         SizedBox(
@@ -123,7 +126,10 @@ class _HomeViewState extends State<HomeView> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
                 return Center(
-                  child: CircularProgressIndicator(),
+                  child: SpinKitWave(
+                    color: Colors.indigo,
+                    size: 70.0,
+                  ),
                 );
               } else {
                 MovieResponse mr = snapshot.data;
@@ -164,6 +170,11 @@ class _HomeViewState extends State<HomeView> {
                           ? Container(
                               child: InkWell(
                                 onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              DetailItem(movie: m)));
                                   print(m.title);
                                 },
                                 child: Card(
@@ -175,20 +186,28 @@ class _HomeViewState extends State<HomeView> {
                                           BorderRadius.circular(10.0)),
                                   child: Column(
                                     children: <Widget>[
-                                      CachedNetworkImage(
-                                        width: 200,
-                                        height: 130,
-                                        imageUrl: IMG_LINK + m.backdropPath,
-                                        fit: BoxFit.fill,
-                                        placeholder: (context, url) =>
-                                            CircularProgressIndicator(),
-                                        errorWidget: (context, url, error) =>
-                                            Icon(Icons.error),
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        child: CachedNetworkImage(
+                                          width: 200,
+                                          height: 120,
+                                          imageUrl: IMG_LINK + m.backdropPath,
+                                          fit: BoxFit.fill,
+                                          placeholder: (context, url) =>
+                                              CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
+                                        ),
                                       ),
                                       Text(
                                         m.title,
-                                        style: TextStyle(fontSize: 15),
-                                      )
+                                        style: TextStyle(fontSize: 15.0),
+                                      ),
+                                      Text(
+                                        'Price :${m.popularity}',
+                                        style: TextStyle(fontSize: 15.0),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -209,7 +228,10 @@ class _HomeViewState extends State<HomeView> {
                                       imageUrl: IMG_LINK + m.posterPath,
                                       fit: BoxFit.fill,
                                       placeholder: (context, url) =>
-                                          CircularProgressIndicator(),
+                                          SpinKitFoldingCube(
+                                        color: Colors.white,
+                                        size: 50.0,
+                                      ),
                                       errorWidget: (context, url, error) =>
                                           Icon(Icons.error),
                                     ),
