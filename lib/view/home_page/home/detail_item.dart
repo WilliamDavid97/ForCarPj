@@ -56,6 +56,7 @@ class DetailItem extends StatelessWidget {
                                 },
                                 child: CircleAvatar(
                                   radius: 40,
+                                  backgroundColor: Colors.white,
                                   backgroundImage:
                                       NetworkImage(IMG_LINK + movie.posterPath),
                                 ),

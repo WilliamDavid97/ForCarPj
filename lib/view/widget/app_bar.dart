@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget {
-  String title;
+  final VoidCallback leftIconCallBack;
+  final IconData leftIcon;
+  final VoidCallback rightIconCallBack;
+  final IconData rightIcon;
+  final String title;
+
+  const CustomAppBar({
+    Key key,
+    this.leftIconCallBack,
+    this.leftIcon,
+    this.rightIconCallBack,
+    this.rightIcon,
+    this.title,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -12,22 +26,25 @@ class CustomAppBar extends StatelessWidget {
           Container(
             alignment: Alignment.centerLeft,
             child: IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {},
+              icon: Icon(leftIcon),
+              onPressed: leftIconCallBack,
             ),
           ),
           Container(
             alignment: Alignment.center,
             child: Text(
-              "Cho Cho Lay",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              title,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                  fontFamily: 'Kingdom'),
             ),
           ),
           Container(
             alignment: Alignment.centerRight,
             child: IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () {},
+              icon: Icon(rightIcon),
+              onPressed: rightIconCallBack,
             ),
           ),
         ],

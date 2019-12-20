@@ -1,7 +1,9 @@
+import 'package:chocholay_car/view/home_page/favorite/favorite.dart';
 import 'package:chocholay_car/view/home_page/home/add_item.dart';
 import 'package:chocholay_car/view/home_page/home/home_view.dart';
 import 'package:chocholay_car/view/home_page/message/message.dart';
 import 'package:chocholay_car/view/home_page/profile/profile.dart';
+import 'package:chocholay_car/view/home_page/search/search.dart';
 import 'package:chocholay_car/view/widget/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
@@ -21,11 +23,26 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          CustomAppBar(),
+          CustomAppBar(
+            title: "Cho Cho Lay Car",
+            leftIcon: Icons.search,
+            leftIconCallBack: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => Search()));
+            },
+            rightIcon: Icons.menu,
+            rightIconCallBack: () {
+              // Navigator.pop(context);
+            },
+          ),
           Expanded(
             child: currentPage == 1
                 ? MessagePage()
-                : currentPage == 2 ? ProfilePage() : HomeView(),
+                : currentPage == 2
+                    ? FavoritePage()
+                    : currentPage == 3 ? ProfilePage() : HomeView(),
           ),
         ],
       ),
@@ -40,6 +57,10 @@ class _HomePageState extends State<HomePage> {
             TabData(
               iconData: Icons.message,
               title: 'Message',
+            ),
+            TabData(
+              iconData: Icons.favorite,
+              title: 'Favorite',
             ),
             TabData(
               iconData: Icons.person,

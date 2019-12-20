@@ -1,3 +1,4 @@
+import 'package:chocholay_car/view/home_page/search/search.dart';
 import 'package:chocholay_car/view/widget/app_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -57,7 +58,20 @@ class _AddItemState extends State<AddItem> {
       body: Container(
         child: ListView(
           children: <Widget>[
-            CustomAppBar(),
+            CustomAppBar(
+              title: "Add Product",
+              leftIcon: Icons.search,
+              leftIconCallBack: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => Search()));
+              },
+              rightIcon: Icons.home,
+              rightIconCallBack: () {
+                Navigator.pop(context);
+              },
+            ),
             TextFormField(
               decoration: InputDecoration(labelText: 'Enter Product Name'),
             ),
@@ -134,46 +148,58 @@ class _AddItemState extends State<AddItem> {
               thickness: 2,
               color: Colors.black54,
             ),
-            Row(
-              children: <Widget>[
-                SizedBox(
-                  width: 10,
-                ),
-                Image.asset(
-                  'assets/facebook.png',
-                  width: 35,
-                  height: 35,
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                Text(
-                  "Share On My Wall",
-                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 18),
-                ),
-              ],
+            InkWell(
+              onTap: () {
+                print('Share On My Wall');
+              },
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Image.asset(
+                    'assets/facebook.png',
+                    width: 35,
+                    height: 35,
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text(
+                    "Share On My Wall",
+                    style:
+                        TextStyle(fontWeight: FontWeight.normal, fontSize: 18),
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               width: 10,
             ),
-            Row(
-              children: <Widget>[
-                SizedBox(
-                  width: 10,
-                ),
-                Image.asset(
-                  'assets/pages-icon.png',
-                  width: 35,
-                  height: 35,
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                Text(
-                  "Share On Facebook Page",
-                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 18),
-                ),
-              ],
+            InkWell(
+              onTap: () {
+                print('Share On Facebook Page');
+              },
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Image.asset(
+                    'assets/pages-icon.png',
+                    width: 35,
+                    height: 35,
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text(
+                    "Share On Facebook Page",
+                    style:
+                        TextStyle(fontWeight: FontWeight.normal, fontSize: 18),
+                  ),
+                ],
+              ),
             )
           ],
         ),
