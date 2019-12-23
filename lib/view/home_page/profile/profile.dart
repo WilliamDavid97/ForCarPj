@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chocholay_car/ob/movie_response.dart';
 import 'package:chocholay_car/view/home_page/favorite/favorite_home.dart';
 import 'package:chocholay_car/view/home_page/favorite/following.dart';
@@ -7,6 +8,7 @@ import 'package:chocholay_car/view/home_page/profile/follower_list.dart';
 import 'package:chocholay_car/view/home_page/profile/following_list.dart';
 import 'package:chocholay_car/view/home_page/profile/listing.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
@@ -57,11 +59,22 @@ class _ProfilePageState extends State<ProfilePage>
             children: <Widget>[
               Container(
                 padding: EdgeInsets.only(left: 10),
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: 60,
-                  backgroundImage: NetworkImage(
-                      'http://getwallpapers.com/wallpaper/full/e/e/b/1281416-beautiful-jared-leto-joker-wallpaper-1920x1080-hd.jpg'),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(60),
+                  child: CachedNetworkImage(
+                    width: 120,
+                    height: 120,
+                    imageUrl:
+                        'http://getwallpapers.com/wallpaper/full/e/e/b/1281416-beautiful-jared-leto-joker-wallpaper-1920x1080-hd.jpg',
+                    fit: BoxFit.fill,
+                    placeholder: (context, url) => Center(
+                      child: SpinKitDualRing(
+                        color: Colors.indigo,
+                        size: 70.0,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                 ),
               ),
               Padding(

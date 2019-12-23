@@ -198,6 +198,7 @@ import 'package:chocholay_car/constant/constants.dart';
 import 'package:chocholay_car/ob/movie_response.dart';
 import 'package:chocholay_car/view/home_page/home/car_list.dart';
 import 'package:chocholay_car/view/home_page/home/detail_item.dart';
+import 'package:chocholay_car/view/sharedPreferences/shared_pref.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -222,11 +223,26 @@ class _HomeViewState extends State<HomeView> {
       "https://api.themoviedb.org/3/movie/popular?api_key=f45b7e038139d8e9bb9f8878d46b6030&page=";
 
   Future<MovieResponse> getMovie() async {
-    return await http.get(url + page.toString()).then((res) {
-      MovieResponse mr = MovieResponse.fromJson(json.decode(res.body));
-      // page = page + 1;
-      return mr;
-    });
+    String data = await SharedPref.getData(key: SharedPref.apiTest);
+    if (data == null) {
+      return await http.get(url + page.toString()).then((res) async {
+        SharedPref.setData(key: SharedPref.apiTest, value: res.body);
+        MovieResponse mr = MovieResponse.fromJson(json.decode(res.body));
+        finalresults = mr.results;
+        setState(() {});
+        return mr;
+      });
+    } else {
+      MovieResponse movie = MovieResponse.fromJson(json.decode(data));
+      finalresults = movie.results;
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    getMovie();
+    super.initState();
   }
 
   void _onRefresh() async {
@@ -316,60 +332,47 @@ class _HomeViewState extends State<HomeView> {
           height: 10,
         ),
         Expanded(
-          child: FutureBuilder(
-            future: getMovie(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: SpinKitWave(
-                    color: Colors.indigo,
-                    size: 70.0,
-                  ),
-                );
-              } else {
-                MovieResponse mr = snapshot.data;
-                if (mr.results != null) {
-                  finalresults.addAll(mr.results);
-                }
-
-                return SmartRefresher(
-                  enablePullDown: true,
-                  enablePullUp: true,
-                  header: WaterDropHeader(),
-                  footer: CustomFooter(
-                    builder: (BuildContext context, LoadStatus mode) {
-                      Widget body;
-                      if (mode == LoadStatus.idle) {
-                        body = Text("pull up load");
-                      } else if (mode == LoadStatus.loading) {
-                        body = CupertinoActivityIndicator();
-                      } else if (mode == LoadStatus.failed) {
-                        body = Text("Load Failed!Click retry!");
-                      } else if (mode == LoadStatus.canLoading) {
-                        body = Text("release to load more");
-                      } else {
-                        body = Text("No more Data");
-                      }
-                      return Container(
-                        height: 55.0,
-                        child: Center(child: body),
-                      );
-                    },
-                  ),
-                  controller: _refreshController,
-                  onRefresh: _onRefresh,
-                  onLoading: _onLoading,
-                  child: GridView.count(
-                    children: finalresults.map((m) {
-                      return CarList(m: m);
-                    }).toList(),
-                    crossAxisCount: 2,
-                  ),
-                );
-              }
-            },
-          ),
-        )
+            child: finalresults == null
+                ? Center(
+                    child: SpinKitWave(
+                      color: Colors.indigo,
+                      size: 70.0,
+                    ),
+                  )
+                : SmartRefresher(
+                    enablePullDown: true,
+                    enablePullUp: true,
+                    header: WaterDropHeader(),
+                    footer: CustomFooter(
+                      builder: (BuildContext context, LoadStatus mode) {
+                        Widget body;
+                        if (mode == LoadStatus.idle) {
+                          body = Text("pull up load");
+                        } else if (mode == LoadStatus.loading) {
+                          body = CupertinoActivityIndicator();
+                        } else if (mode == LoadStatus.failed) {
+                          body = Text("Load Failed!Click retry!");
+                        } else if (mode == LoadStatus.canLoading) {
+                          body = Text("release to load more");
+                        } else {
+                          body = Text("No more Data");
+                        }
+                        return Container(
+                          height: 55.0,
+                          child: Center(child: body),
+                        );
+                      },
+                    ),
+                    controller: _refreshController,
+                    onRefresh: _onRefresh,
+                    onLoading: _onLoading,
+                    child: GridView.count(
+                      children: finalresults.map((m) {
+                        return CarList(m: m);
+                      }).toList(),
+                      crossAxisCount: 2,
+                    ),
+                  ))
       ],
     );
   }

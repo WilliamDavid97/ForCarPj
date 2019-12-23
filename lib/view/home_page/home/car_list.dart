@@ -106,8 +106,12 @@ class _CarListState extends State<CarList> {
                             height: 120,
                             imageUrl: IMG_LINK + widget.m.posterPath,
                             fit: BoxFit.fill,
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
+                            placeholder: (context, url) => Center(
+                              child: SpinKitDualRing(
+                                color: Colors.indigo,
+                                size: 70.0,
+                              ),
+                            ),
                             errorWidget: (context, url, error) =>
                                 Icon(Icons.error),
                           ),
